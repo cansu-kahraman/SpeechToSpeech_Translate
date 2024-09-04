@@ -1,16 +1,31 @@
-# translate
+AI Translate Project
+Welcome to the AI Translate Project! This project is an application that translates Turkish speech into English in real-time and displays the translated 
+text both on-screen and audibly. It is developed using Flutter and Dart.
 
-A new Flutter project.
+Features
+* Real-time Translation: Translates Turkish speech into English instantaneously.
+* On-screen Display: Shows the translated text in both Turkish and English on the screen.
+* Text-to-Speech: Reads the translated English text aloud.
 
-## Getting Started
+Installation
+To clone and run the project on your local machine, follow these steps:
+Clone the Repository:
+  git clone https://github.com/your_username/ai_translate_project.git
 
-This project is a starting point for a Flutter application.
+Install Dependencies:
+Navigate to the project root directory and install the necessary packages:
+  flutter pub get
 
-A few resources to get you started if this is your first Flutter project:
+Run the Application:
+To start the application, use:
+  flutter run
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Usage
+Once the application is running, you can use the microphone to record speech. The app will instantly translate the speech, 
+display the translated text in both languages on the screen, and read the English text aloud.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Future Features
+The project is continually being improved, and upcoming updates will include:
+* Support for additional languages
+* Enhanced text-to-speech options
+* User interface improvements
