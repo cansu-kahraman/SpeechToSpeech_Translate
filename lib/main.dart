@@ -3,7 +3,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:translator/translator.dart';
-
+import 'package:flutter_tts/flutter_tts.dart';  
 
 void main() {
   runApp(MyApp());
@@ -31,38 +31,41 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _speechEnabled = false;
   String _lastWords = '';
   String _translatedText = '';
-
+  FlutterTts _flutterTts = FlutterTts(); // FlutterTts instance oluşturun
   GoogleTranslator _translator = GoogleTranslator();
 
   @override
   void initState() {
     super.initState();
     _initSpeech();
+    _initTts();
   }
 
-  /// This has to happen only once per app
+  /// TTS motorunu başlatma
+  void _initTts() async {
+    await _flutterTts.setLanguage("en-US");
+    await _flutterTts.setSpeechRate(1); // Konuşma hızını ayarlayın 0,5 ti
+  }
+
+  /// Speech-to-Text'i başlatma
   void _initSpeech() async {
     _speechEnabled = await _speechToText.initialize();
     setState(() {});
   }
 
-  /// Each time to start a speech recognition session
+  /// Her konuşma tanıma oturumu başlatıldığında çağrılır
   void _startListening() async {
     await _speechToText.listen(onResult: _onSpeechResult);
     setState(() {});
   }
 
-  /// Manually stop the active speech recognition session
-  /// Note that there are also timeouts that each platform enforces
-  /// and the SpeechToText plugin supports setting timeouts on the
-  /// listen method.
+  /// Konuşma tanımayı manuel olarak durdurma
   void _stopListening() async {
     await _speechToText.stop();
     setState(() {});
   }
 
-  /// This is the callback that the SpeechToText plugin calls when
-  /// the platform returns recognized words.
+  /// Konuşma sonucunu işleme
   void _onSpeechResult(SpeechRecognitionResult result) async {
     setState(() {
       _lastWords = result.recognizedWords;
@@ -72,6 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _translatedText = translation.text;
     });
+  }
+
+  /// İngilizce metni sesli okuma
+  void _speak() async {
+    await _flutterTts.speak(_translatedText);
   }
 
   @override
@@ -101,16 +109,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           ? 'Tap the microphone to start listening...'
                           : 'Speech not available',
                   style: TextStyle(fontSize: 20),
-              
                 ),
               ),
+            ),
+            ElevatedButton(
+              onPressed: _speak, // Butona basıldığında İngilizce metni sesli oku
+              child: Text("Listen to the translated text"),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed:
-            // If not yet listening for speech start, otherwise stop
             _speechToText.isNotListening ? _startListening : _stopListening,
         tooltip: 'Listen',
         child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
